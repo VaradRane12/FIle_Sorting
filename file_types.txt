@@ -1,0 +1,6 @@
+__clgpdf
+C:\Users\Asus\Documents\clg
+__doc
+C:\Users\Asus\Pictures\Documents
+__pic
+C:\Users\Asus\Pictures\pictures
