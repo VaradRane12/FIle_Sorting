@@ -5,20 +5,21 @@ full_name_ext = {}
 fl_lst = os.listdir(path)
 for i in range(0,len(fl_lst)):
     if not os.path.isdir(path+fl_lst[i]):  #chekcing if the iterated file in a folder or a file appending only if its a file
-        full_name_ext[fl_lst[i]] = [os.path.splitext(fl_lst[i])[0],os.path.splitext(fl_lst[i])[1]]
+        full_name_ext[i] = [fl_lst[i],os.path.splitext(fl_lst[i])[0],os.path.splitext(fl_lst[i])[1]]
 
 i = 0
-file =  open("file_types.txt")
+file =  open("Text_sort.txt")
 ext_lst = file.readlines()
 while i<len(ext_lst):
     if (i%2 == 0):
-        for j in range(0,len(names)):
-            if(ext_lst[i].replace("\n","") in names[j]):
+        for j in range(1,len(full_name_ext)):
+#             print(full_name_ext[j][1])
+            if(ext_lst[i].replace("\n","") in full_name_ext[j][1]):
                 try:
-                    print("intial list",fl_lst[j+1])
+                    print("intial list",full_name_ext[j][0])
                     print("path:",ext_lst[i+1])
-                    print(path+fl_lst[j+1])
-                    shutil.move(path+fl_lst[j+1],ext_lst[i+1].replace("\n",""))
+                    print(path+full_name_ext[j][0])
+                    shutil.move(path+full_name_ext[j][0],ext_lst[i+1].replace("\n",""))
                 except:
                     i+=1
                     continue
@@ -44,4 +45,4 @@ for i in y:
                 continue
 
             
-            #CHANGE EVERYTHING TO THE NEW DICTIONARY
+           
