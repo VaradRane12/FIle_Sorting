@@ -17,22 +17,20 @@ ext_lst = file.readlines()
 while i<len(ext_lst):
     if (i%2 == 0):
         for j in range(1,len(full_name_ext)):
-#             print(full_name_ext[j][1])
             if(ext_lst[i].replace("\n","") in full_name_ext[j][1]):
                 try:
-                    print("intial list",full_name_ext[j][0])
-                    print("path:",ext_lst[i+1])
-                    print(path+full_name_ext[j][0])
-                    shutil.move(path+full_name_ext[j][0],ext_lst[i+1].replace("\n",""))
-                except:
+                    if os.path.exists(ext_lst[i+1].replace("\n","")+"/"+full_name_ext[j][0]):
+                        print("the file already exists in the destination folder")
+                        continue
+                    shutil.move(path+full_name_ext[j][0],ext_lst[i+1].replace("\n",""))        
+                except :
                     i+=1
-                    continue
-                
+                    continue      
         i+=1
+    
     else:
         i+=1
         continue
-
 
 for loop in range(0,len(y)):
     if not os.path.exists(path + y[loop]):
