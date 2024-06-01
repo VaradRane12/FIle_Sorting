@@ -2,10 +2,14 @@ import os,shutil
 import re
 path = r"D:\test_sorting/"
 full_name_ext = {}
+y = []
 fl_lst = os.listdir(path)
 for i in range(0,len(fl_lst)):
     if not os.path.isdir(path+fl_lst[i]):  #chekcing if the iterated file in a folder or a file appending only if its a file
         full_name_ext[i] = [fl_lst[i],os.path.splitext(fl_lst[i])[0],os.path.splitext(fl_lst[i])[1]]
+        y.append(os.path.splitext(fl_lst[i])[1])
+y = set(y)
+
 
 i = 0
 file =  open("Text_sort.txt")
@@ -37,10 +41,10 @@ for loop in range(0,len(y)):
 
 
 for i in y:
-    for j in fl_lst:
-        if i in j:
+    for j in full_name_ext.values():
+        if i in j[0]:
             try:
-                shutil.move(path+j,path+i+"/"+j)
+                shutil.move(path+j[0],path+i+"/"+j[0])
             except:
                 continue
 
