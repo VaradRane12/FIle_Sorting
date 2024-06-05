@@ -7,19 +7,28 @@ import time
 
 global path 
 path = r"D:\test_sorting/"
+global full_name_ext
 full_name_ext = {}
-y = []
-
-
+def lst_create():
+    fl_lst = os.listdir(path)
+    for i in range(0,len(fl_lst)):
+        if not os.path.isdir(path+fl_lst[i]):  #chekcing if the iterated file in a folder or a file appending only if its a file
+            full_name_ext[i] = [fl_lst[i],os.path.splitext(fl_lst[i])[0],os.path.splitext(fl_lst[i])[1]]
+            
+    return full_name_ext
+            
+            
+            
+            
 class Handler(watchdog.events.PatternMatchingEventHandler):
     def __init__(self):
         # Set the patterns for PatternMatchingEventHandler
         watchdog.events.PatternMatchingEventHandler.__init__(self,ignore_directories=True, case_sensitive=False)
 
     def on_created(self, event):
-        named_file_check(full_name_ext)
-        dir_path_sort(y,full_name_ext)
-
+        print("even created")
+        named_file_check()
+        dir_path_sort()
 #     def on_modified(self, event):
 #         print("Watchdog received modified event - % s." % event.src_path)
 #         # Event is modified, you can process it now
@@ -27,13 +36,16 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
         print("Moved %s"%event.src_path)
     def on_deleted(self,event):
         print("deleted %s"%event.src_path)
-def named_file_check(full_name_ext):
+def named_file_check():
+    full_name_ext = lst_create()
     i = 0
-    file =  open("file_types.txt")
+    file =  open("Text_sort.txt")
     ext_lst = file.readlines()
     while i<len(ext_lst):
+        #print("in while loop")
         if (i%2 == 0):
             for j in range(1,len(full_name_ext)):
+                #print(f"\n\n\nextlist: {ext_lst[i]}\n fullname: {full_name_ext[j]}\n\n")
                 if(ext_lst[i].replace("\n","") in full_name_ext[j][1]):
                     try:
                         if os.path.exists(ext_lst[i+1].replace("\n","")+"/"+full_name_ext[j][0]):
@@ -48,7 +60,17 @@ def named_file_check(full_name_ext):
         else:
             i+=1
             continue
-def dir_path_sort(y,full_name_ext):
+def dir_path_sort():
+    y = []
+
+    fl_lst = os.listdir(path)
+    for i in range(0,len(fl_lst)):
+        if not os.path.isdir(path+fl_lst[i]):  #chekcing if the iterated file in a folder or a file appending only if its a file
+            full_name_ext[i] = [fl_lst[i],os.path.splitext(fl_lst[i])[0],os.path.splitext(fl_lst[i])[1]]
+            y.append(os.path.splitext(fl_lst[i])[1])
+    y = set(y)    
+    y = list(y)
+    print("dirpathsort")
     for loop in range(0,len(y)):
         if not os.path.exists(path + y[loop]):
             os.makedirs(path + y[loop])
@@ -63,14 +85,9 @@ def dir_path_sort(y,full_name_ext):
                 except:
                     continue
 
-fl_lst = os.listdir(path)
 
+                    
 
-for i in range(0,len(fl_lst)):
-    if not os.path.isdir(path+fl_lst[i]):  #chekcing if the iterated file in a folder or a file appending only if its a file
-        full_name_ext[i] = [fl_lst[i],os.path.splitext(fl_lst[i])[0],os.path.splitext(fl_lst[i])[1]]
-        y.append(os.path.splitext(fl_lst[i])[1])
-y = set(y)
 
 
 
