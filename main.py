@@ -26,16 +26,9 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
         watchdog.events.PatternMatchingEventHandler.__init__(self,ignore_directories=True, case_sensitive=False)
 
     def on_created(self, event):
-        print("even created")
         named_file_check()
         dir_path_sort()
-#     def on_modified(self, event):
-#         print("Watchdog received modified event - % s." % event.src_path)
-#         # Event is modified, you can process it now
-    def on_moved(self,event):
-        print("Moved %s"%event.src_path)
-    def on_deleted(self,event):
-        print("deleted %s"%event.src_path)
+
 def named_file_check():
     full_name_ext = lst_create()
     i = 0
@@ -49,9 +42,10 @@ def named_file_check():
                 if(ext_lst[i].replace("\n","") in full_name_ext[j][1]):
                     try:
                         if os.path.exists(ext_lst[i+1].replace("\n","")+"/"+full_name_ext[j][0]):
-                            print("the file already exists in the destination folder")
+                            print("the file already exists in the destination folder",full_name_ext[j])
                             continue
-                        shutil.move(path+full_name_ext[j][0],ext_lst[i+1].replace("\n",""))        
+                        shutil.move(path+full_name_ext[j][0],ext_lst[i+1].replace("\n",""))   
+                        print("moved: ",full_name_ext[j])
                     except :
                         i+=1
                         continue      
@@ -70,7 +64,6 @@ def dir_path_sort():
             y.append(os.path.splitext(fl_lst[i])[1])
     y = set(y)    
     y = list(y)
-    print("dirpathsort")
     for loop in range(0,len(y)):
         if not os.path.exists(path + y[loop]):
             os.makedirs(path + y[loop])
