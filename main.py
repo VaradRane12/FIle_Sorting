@@ -4,7 +4,7 @@ import watchdog.events
 import watchdog.observers
 import time
 
-
+ 
 global path 
 path = r"D:\test_sorting/"
 global full_name_ext
@@ -22,13 +22,11 @@ def lst_create():
             
 class Handler(watchdog.events.PatternMatchingEventHandler):
     def __init__(self):
-        # Set the patterns for PatternMatchingEventHandler
         watchdog.events.PatternMatchingEventHandler.__init__(self,ignore_directories=True, case_sensitive=False)
 
     def on_created(self, event):
-        named_file_check()
         dir_path_sort()
-
+'''
 def named_file_check():
     full_name_ext = lst_create()
     i = 0
@@ -53,7 +51,26 @@ def named_file_check():
         
         else:
             i+=1
-            continue
+            continue'''
+def move_file(lst):
+    try:
+        if os.path.exists(lst[2]+"/"+lst[3]):
+            print("the file already exists in the destination folder",lst[2])
+            return 
+        shutil.move(path+lst[3],lst[2])   
+        #print("moved: ",full_name_ext[j])
+    except:
+        print("Something went wrong")      
+def check_name(lst):
+    file =  open("Text_sort.txt")
+    ext_lst = file.readlines()
+    i = 0
+    while i<len(ext_lst):
+        #print("in while loop")
+        if (i%2 == 0):
+            if ext_lst[i].replace("\n","") in lst[1]:
+                return [1,ext_lst[i].replace("\n",""),ext_lst[i+1].replace("\n",""),lst[0]]
+        i+=1
 def dir_path_sort():
     y = []
 
@@ -64,7 +81,7 @@ def dir_path_sort():
             y.append(os.path.splitext(fl_lst[i])[1])
     y = set(y)    
     y = list(y)
-    for loop in range(0,len(y)):
+    for loop in range(0,len(y)): 
         if not os.path.exists(path + y[loop]):
             os.makedirs(path + y[loop])
 
@@ -72,19 +89,13 @@ def dir_path_sort():
 
     for i in y:
         for j in full_name_ext.values():
+            if check_name(j):
+                move_file(check_name(j))
             if i in j[0]:
                 try:
                     shutil.move(path+j[0],path+i+"/"+j[0])
                 except:
                     continue
-
-
-                    
-
-
-
-
-
 if __name__ == "__main__":
     src_path = r"D:\test_sorting/"
     event_handler = Handler()
